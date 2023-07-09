@@ -58,6 +58,8 @@ app.get("/", (req, res) => {
 });
 
 app.post("/", (req, res) => {
+  res.setHeader("Content-Type", "application/json");
+
   const item = req.body.item;
 
   pushItem(item)

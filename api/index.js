@@ -58,7 +58,7 @@ app.get("/", (req, res) => {
 });
 
 app.post("/", (req, res) => {
-  console.log(req);
+  console.log(req.body);
   const id = req.body.id;
   const name = req.body.name;
 

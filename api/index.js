@@ -35,8 +35,8 @@ async function pushItem(item) {
     throw err;
   }
 
-  console.log(items);
   items.push(item);
+  console.log(items);
 
   await kvClient.set("items", items);
 
@@ -80,7 +80,7 @@ app.post("/", (req, res) => {
     });
 });
 
-app.post("/api", (req, res) => {
+app.delete("/", (req, res) => {
   res.setHeader("Content-Type", "application/json");
 
   console.log(req.body);
@@ -90,11 +90,12 @@ app.post("/api", (req, res) => {
   }
 
   const id = req.body.id;
-  const name = req.body.name;
 
-  pushItem({ id, name })
+  getItems()
     .then((items) => {
-      res.send(JSON.stringify(items));
+      const newItems = items.filter((item) => item.id !== id);
+      kvClient.set("items", newItems);
+      res.send(JSON.stringify(newItems));
     })
     .catch((err) => {
       console.log(err);

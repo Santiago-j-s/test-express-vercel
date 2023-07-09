@@ -6,6 +6,8 @@ const kvClient = createClient({
   token: process.env.KV_REST_API_TOKEN,
 });
 
+const itemsKey = "items";
+
 /**
  * @returns {{ id: string; name: string }[]}}
  */
@@ -13,7 +15,7 @@ async function getItems() {
   let items;
 
   try {
-    items = (await kvClient.get("items")) ?? [];
+    items = (await kvClient.get(itemsKey)) ?? [];
   } catch (err) {
     console.log(err);
     throw err;
@@ -29,7 +31,7 @@ async function getItems() {
 async function pushItem(item) {
   let items;
   try {
-    items = (await kvClient.get("items")) ?? [];
+    items = (await kvClient.get(itemsKey)) ?? [];
   } catch (err) {
     console.log(err);
     throw err;
@@ -38,7 +40,13 @@ async function pushItem(item) {
   items.push(item);
   console.log(items);
 
-  await kvClient.set("items", items);
+  try {
+    await kvClient.set(itemsKey, items);
+    console.log(`Items set successfully ${JSON.stringify(items)}`);
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
 
   return items;
 }
@@ -47,14 +55,21 @@ async function deleteItem(id) {
   let items;
 
   try {
-    items = (await kvClient.get("items")) ?? [];
+    items = (await kvClient.get(itemsKey)) ?? [];
   } catch (err) {
     console.log(err);
     throw err;
   }
 
-  const newItems = items.filter((item) => item.id !== id);
-  kvClient.set("items", newItems);
+  const newItems = items.filter((item) => item.id !== id.toString());
+
+  try {
+    await kvClient.set(itemsKey, newItems);
+    console.log(`Items set successfully ${JSON.stringify(newItems)}`);
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
 
   return newItems;
 }
@@ -64,7 +79,6 @@ app.get("/", (req, res) => {
 
   getItems()
     .then((items) => {
-      res.setHeader("Cache-Control", "s-max-age=1, stale-while-revalidate");
       res.send(JSON.stringify(items));
     })
     .catch((err) => {

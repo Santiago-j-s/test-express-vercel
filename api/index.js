@@ -1,6 +1,9 @@
 const { createClient } = require("@vercel/kv");
 const app = require("express")();
 
+// Oranges
+// Apples
+
 const kvClient = createClient({
   url: process.env.KV_REST_API_URL,
   token: process.env.KV_REST_API_TOKEN,
@@ -60,7 +63,8 @@ app.get("/", (req, res) => {
 app.post("/", (req, res) => {
   res.setHeader("Content-Type", "application/json");
 
-  const { id, name } = req.body;
+  const id = req.body.id;
+  const name = req.body.name;
 
   pushItem({ id, name })
     .then((items) => {

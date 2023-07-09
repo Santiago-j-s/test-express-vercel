@@ -61,16 +61,16 @@ app.get("/", (req, res) => {
 });
 
 app.post("/", (req, res) => {
-  res.setHeader("Content-Type", "application/json");
-
   const id = req.body.id;
   const name = req.body.name;
 
   pushItem({ id, name })
     .then((items) => {
+      res.setHeader("Content-Type", "application/json");
       res.send(JSON.stringify(items));
     })
     .catch((err) => {
+      res.setHeader("Content-Type", "application/json");
       console.log(err);
       res.status(500).send("Error");
     });

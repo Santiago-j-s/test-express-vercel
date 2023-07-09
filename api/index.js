@@ -1,7 +1,10 @@
 import { createClient } from "@vercel/kv";
+import bodyParser from "body-parser";
 import express from "express";
 
 const app = express();
+
+app.use(bodyParser.json());
 
 const kvClient = createClient({
   url: process.env.KV_REST_API_URL,
@@ -133,5 +136,9 @@ app.delete("/", (req, res) => {
       return res.status(500).send(JSON.stringify("Error"));
     });
 });
+
+export const config = {
+  api: { bodyParser: false },
+};
 
 export default app;

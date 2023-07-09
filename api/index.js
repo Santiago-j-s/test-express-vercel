@@ -1,5 +1,7 @@
-const { createClient } = require("@vercel/kv");
-const app = require("express")();
+import { createClient } from "@vercel/kv";
+import express from "express";
+
+const app = express();
 
 const kvClient = createClient({
   url: process.env.KV_REST_API_URL,
@@ -132,4 +134,4 @@ app.delete("/", (req, res) => {
     });
 });
 
-module.exports = app;
+export default app;

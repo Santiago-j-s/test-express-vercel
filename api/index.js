@@ -63,7 +63,7 @@ app.post("/", (req, res) => {
   console.log(req.body);
 
   if (!req.body) {
-    return res.status(400).send("No body");
+    return res.status(400).send(JSON.stringify("No body"));
   }
 
   const id = req.body.id;
@@ -74,9 +74,9 @@ app.post("/", (req, res) => {
       res.send(JSON.stringify(items));
     })
     .catch((err) => {
-      res.setHeader("Content-Type", "application/json");
       console.log(err);
       res.status(500).send("Error");
+      return res.status(500).send(JSON.stringify("Error"));
     });
 });
 

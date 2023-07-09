@@ -107,7 +107,7 @@ app.delete("/", (req, res) => {
 
   const id = req.body.id;
 
-  deleteItem()
+  deleteItem(id)
     .then((items) => {
       return res.send(JSON.stringify(items));
     })

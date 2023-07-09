@@ -61,6 +61,11 @@ app.post("/", (req, res) => {
   res.setHeader("Content-Type", "application/json");
 
   console.log(req.body);
+
+  if (!req.body) {
+    return res.status(400).send("No body");
+  }
+
   const id = req.body.id;
   const name = req.body.name;
 

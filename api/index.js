@@ -60,9 +60,9 @@ app.get("/", (req, res) => {
 app.post("/", (req, res) => {
   res.setHeader("Content-Type", "application/json");
 
-  const item = req.body.item;
+  const { id, name } = req.body;
 
-  pushItem(item)
+  pushItem({ id, name })
     .then((items) => {
       res.send(JSON.stringify(items));
     })

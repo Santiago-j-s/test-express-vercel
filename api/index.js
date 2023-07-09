@@ -43,6 +43,22 @@ async function pushItem(item) {
   return items;
 }
 
+async function deleteItem(id) {
+  let items;
+
+  try {
+    items = (await kvClient.get("items")) ?? [];
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+
+  const newItems = items.filter((item) => item.id !== id);
+  kvClient.set("items", newItems);
+
+  return newItems;
+}
+
 app.get("/", (req, res) => {
   res.setHeader("Content-Type", "application/json");
 
@@ -71,7 +87,7 @@ app.post("/", (req, res) => {
 
   pushItem({ id, name })
     .then((items) => {
-      res.send(JSON.stringify(items));
+      return res.send(JSON.stringify(items));
     })
     .catch((err) => {
       console.log(err);
@@ -91,11 +107,9 @@ app.delete("/", (req, res) => {
 
   const id = req.body.id;
 
-  getItems()
+  deleteItem()
     .then((items) => {
-      const newItems = items.filter((item) => item.id !== id);
-      kvClient.set("items", newItems);
-      res.send(JSON.stringify(newItems));
+      return res.send(JSON.stringify(items));
     })
     .catch((err) => {
       console.log(err);

@@ -80,4 +80,27 @@ app.post("/", (req, res) => {
     });
 });
 
+app.post("/api", (req, res) => {
+  res.setHeader("Content-Type", "application/json");
+
+  console.log(req.body);
+
+  if (!req.body) {
+    return res.status(400).send(JSON.stringify("No body"));
+  }
+
+  const id = req.body.id;
+  const name = req.body.name;
+
+  pushItem({ id, name })
+    .then((items) => {
+      res.send(JSON.stringify(items));
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).send("Error");
+      return res.status(500).send(JSON.stringify("Error"));
+    });
+});
+
 module.exports = app;
